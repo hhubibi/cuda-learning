@@ -11,8 +11,8 @@ float cuda_add_um(int block_dim);
 int main(int argc, char *argv[]) {
     print_device_msg();
 
-    std::string file_path = __FILE__;
-    std::string dir_path = file_path.substr(0, file_path.rfind("/"));
+    std::filesystem::path file_path(__FILE__);
+    std::string dir_path = file_path.parent_path().parent_path().string();
     std::string csv_file_path = dir_path + "/data/add.csv";
     std::ofstream csv_file(csv_file_path);
     if (!csv_file.is_open()) {
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]) {
     }
 
     csv_file << "block_dim,cpu,cpu_omp,cuda,cuda_um\n";
-    for (int block_dim = 32; block_dim < (1<<10); block_dim += 32) {
+    for (int block_dim = 32; block_dim <= (1<<10); block_dim += 32) {
         csv_file << block_dim << ',';
         csv_file << cpu_add(false) << ',';
         csv_file << cpu_add(true) << ',';
