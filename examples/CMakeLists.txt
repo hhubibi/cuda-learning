@@ -14,13 +14,18 @@ function(build_example example_name)
         endif()
     endif()
 
-    if(${example_name} STREQUAL "julia")
+    set(ui_examples julia ball)
+    
+    if(${example_name} IN_LIST ui_examples)
         find_package(OpenGL REQUIRED)
         if(OPENGL_FOUND)
             target_link_libraries(${example_name} glfw GLEW OpenGL::GL)
         endif()
+
         find_package(CUDAToolkit REQUIRED)
-        target_link_libraries(${example_name} CUDA::cudart)
+        if(CUDAToolkit_FOUND)
+            target_link_libraries(${example_name} CUDA::cudart)
+        endif()
     endif()
 endfunction(build_example)
 
@@ -36,6 +41,7 @@ set(examples
     add
     julia
     dotprod
+    ball
     )
 
 build_examples()
