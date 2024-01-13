@@ -17,7 +17,7 @@ float scale = 1.5;
 float c_x = 0.355;
 float c_y = 0.355;
 
-void cuda_draw_julia(uchar3* ptr, int width, int height, float scale, int max_iter, float c_x, float c_y);
+void cuda_draw_julia(uchar3* ptr, int width, int height, float scale, int max_iter, float c_x, float c_y, int ticks);
 
 void draw_julia(std::vector<GLubyte>& pixels, int width, int height) {
     for (int x = 0; x < width; ++x) {
@@ -132,6 +132,7 @@ void cuda_draw() {
 
     double last_time = glfwGetTime();
     int frame_count = 0;
+    int ticks = 0;
     while (!glfwWindowShouldClose(window)) {
         double current_time = glfwGetTime();
         frame_count++;
@@ -141,13 +142,14 @@ void cuda_draw() {
             frame_count = 0;
             last_time += 1.0;
         }
+        ticks++;
 
         uchar3 *d_out;
         size_t num_bytes;
         cudaGraphicsMapResources(1, &cuda_resource, 0);
         cudaGraphicsResourceGetMappedPointer((void **)&d_out, &num_bytes, cuda_resource);
 
-        cuda_draw_julia(d_out, width, height, scale, max_iter, c_x, c_y);
+        cuda_draw_julia(d_out, width, height, scale, max_iter, c_x, c_y, ticks);
         cudaDeviceSynchronize();
 
         cudaGraphicsUnmapResources(1, &cuda_resource, 0);
