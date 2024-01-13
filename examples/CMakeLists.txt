@@ -35,6 +35,7 @@ endfunction(build_examples)
 set(examples
     add
     julia
+    dotprod
     )
 
 build_examples()
