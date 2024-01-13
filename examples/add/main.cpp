@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     print_device_msg();
 
     std::filesystem::path file_path(__FILE__);
-    std::string dir_path = file_path.parent_path().parent_path().string();
+    std::string dir_path = file_path.parent_path().parent_path().parent_path().string();
     std::string csv_file_path = dir_path + "/data/add.csv";
     std::ofstream csv_file(csv_file_path);
     if (!csv_file.is_open()) {
