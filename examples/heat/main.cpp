@@ -81,11 +81,23 @@ void cuda_draw(int memory_type) {
     init(&data);
 
     data.bitmap_ptr = d_out;
+    draw(&data);
 
+    cudaGraphicsUnmapResources(1, &cuda_resource, 0);
+
+    double last_time = glfwGetTime();
+    int frame_count = 0;
+    int ticks = 0;
     while (!glfwWindowShouldClose(window)) {
-        draw(&data);
-        
-        cudaDeviceSynchronize();
+        double current_time = glfwGetTime();
+        frame_count++;
+
+        if (current_time - last_time >= 1.0) {
+            std::cout << "FPS: " << frame_count << std::endl;
+            frame_count = 0;
+            last_time += 1.0;
+        }
+        ticks++;
 
         glClear(GL_COLOR_BUFFER_BIT);
         
@@ -95,11 +107,8 @@ void cuda_draw(int memory_type) {
         glfwPollEvents();
     }
 
-    cudaGraphicsUnmapResources(1, &cuda_resource, 0);
     cudaGraphicsUnregisterResource(cuda_resource);
-
     destroy(&data);
-
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);
     glDeleteBuffers(1, &buffer);
     glfwDestroyWindow(window);
