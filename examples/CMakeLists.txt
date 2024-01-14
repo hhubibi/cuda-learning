@@ -2,10 +2,12 @@ function(build_example example_name)
     set(example_folder ${CMAKE_CURRENT_SOURCE_DIR}/${example_name})
     message(STATUS "Generating project file for example in ${example_folder}")
 
+    file(GLOB cuda_header_files ${example_folder}/*.cuh)
     file(GLOB cuda_files ${example_folder}/*.cu)
+    file(GLOB header_files ${example_folder}/*.h)
 	set(main_cpp ${example_folder}/main.cpp)
 
-    add_executable(${example_name} ${cuda_files} ${main_cpp})
+    add_executable(${example_name} ${header_files} ${cuda_header_files} ${cuda_files} ${main_cpp})
     
     if(${example_name} STREQUAL "add")
         find_package(OpenMP REQUIRED)
@@ -14,7 +16,7 @@ function(build_example example_name)
         endif()
     endif()
 
-    set(ui_examples julia ball raytracing)
+    set(ui_examples julia ball raytracing heat)
     
     if(${example_name} IN_LIST ui_examples)
         find_package(OpenGL REQUIRED)
@@ -43,6 +45,7 @@ set(examples
     dotprod
     ball
     raytracing
+    heat
     )
 
 build_examples()
