@@ -14,7 +14,7 @@ function(build_example example_name)
         endif()
     endif()
 
-    set(ui_examples julia ball)
+    set(ui_examples julia ball raytracing)
     
     if(${example_name} IN_LIST ui_examples)
         find_package(OpenGL REQUIRED)
@@ -42,6 +42,7 @@ set(examples
     julia
     dotprod
     ball
+    raytracing
     )
 
 build_examples()
