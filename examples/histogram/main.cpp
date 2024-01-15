@@ -27,7 +27,7 @@ void cpu_count_frequency(unsigned char* random_bytes, int stream_length, int* hi
     }
 
     auto end = std::chrono::high_resolution_clock::now(); 
-    auto elapsed = std::chrono::duration<double>(end - start).count();
+    auto elapsed = std::chrono::duration<double, std::milli>(end - start).count();
     printf("CPU count time elapsed: %.6f ms\n", elapsed);
 }
 
