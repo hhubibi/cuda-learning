@@ -11,23 +11,20 @@ function(build_example example_name)
     
     if(${example_name} STREQUAL "add")
         find_package(OpenMP REQUIRED)
-        if(OpenMP_CXX_FOUND)
-            target_link_libraries(${example_name} OpenMP::OpenMP_CXX)
-        endif()
+        target_link_libraries(${example_name} OpenMP::OpenMP_CXX)
     endif()
 
     set(ui_examples julia ball raytracing heat)
     
     if(${example_name} IN_LIST ui_examples)
+        find_package(GLEW REQUIRED)
+        target_link_libraries(${example_name} GLEW::glew)
+
         find_package(OpenGL REQUIRED)
-        if(OPENGL_FOUND)
-            target_link_libraries(${example_name} glfw GLEW OpenGL::GL)
-        endif()
+        target_link_libraries(${example_name} glfw OpenGL::GL)
 
         find_package(CUDAToolkit REQUIRED)
-        if(CUDAToolkit_FOUND)
-            target_link_libraries(${example_name} CUDA::cudart)
-        endif()
+        target_link_libraries(${example_name} CUDA::cudart)
     endif()
 endfunction(build_example)
 
@@ -46,6 +43,7 @@ set(examples
     ball
     raytracing
     heat
+    histogram
     )
 
 build_examples()
