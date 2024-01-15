@@ -44,6 +44,7 @@ set(examples
     raytracing
     heat
     histogram
+    cuda_stream
     )
 
 build_examples()
