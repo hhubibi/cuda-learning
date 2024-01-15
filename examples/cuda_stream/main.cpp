@@ -6,6 +6,7 @@ float cuda_host_alloc_test(int test_size, bool up);
 void single_stream();
 void double_stream();
 void double_stream_correct();
+void multi_stream(int stream_num);
 
 void malloc_test() {
     int test_size = 64*1024*1024;
@@ -40,11 +41,12 @@ void malloc_test() {
 }
 
 int main() {
-    // malloc_test();
-
-    single_stream();
-
+//     malloc_test();
+//     single_stream();
     double_stream();
-
     double_stream_correct();
+
+    for (int i = 1; i <= 4; ++i) {
+        multi_stream(i);
+    }
 }
